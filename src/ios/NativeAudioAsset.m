@@ -47,7 +47,18 @@ static const CGFloat FADE_DELAY = 0.08;
 - (void) play
 {
     AVAudioPlayer * player = [voices objectAtIndex:playIndex];
-    [player setCurrentTime:0.0];
+    //[player setCurrentTime:0.0]; // Added
+    player.numberOfLoops = 0;
+    [player play];
+    playIndex += 1;
+    playIndex = playIndex % [voices count];
+}
+
+- (void) playAtTime:(NSNumber*) time; // Added
+{
+    AVAudioPlayer * player = [voices objectAtIndex:playIndex];
+    NSTimeInterval interval = [time doubleValue];
+    [player setCurrentTime:interval];
     player.numberOfLoops = 0;
     [player play];
     playIndex += 1;
@@ -84,6 +95,16 @@ static const CGFloat FADE_DELAY = 0.08;
         }
     }
 }
+
+// Added
+- (void) pause
+{
+    for (int x = 0; x < [voices count]; x++) {
+        AVAudioPlayer * player = [voices objectAtIndex:x];
+        [player pause];
+    }
+}
+// Finished Adding
 
 - (void) stop
 {
