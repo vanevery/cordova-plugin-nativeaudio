@@ -42,6 +42,7 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 	public static final String PRELOAD_COMPLEX="preloadComplex";
 	public static final String PLAY="play";
 	public static final String STOP="stop";
+    public static final String PAUSE="pause"; // Added
 	public static final String LOOP="loop";
 	public static final String UNLOAD="unload";
     public static final String ADD_COMPLETE_LISTENER="addCompleteListener";
@@ -137,6 +138,26 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		return new PluginResult(Status.OK);
 	}
 
+    // Added
+    private PluginResult executePause(JSONArray data) {
+        String audioID;
+        try {
+            audioID = data.getString(0);
+            //Log.d( LOGTAG, "stop - " + audioID );
+            
+            if (assetMap.containsKey(audioID)) {
+                NativeAudioAsset asset = assetMap.get(audioID);
+                asset.pause();
+            } else {
+                return new PluginResult(Status.ERROR, ERROR_NO_AUDIOID);
+            }
+        } catch (JSONException e) {
+            return new PluginResult(Status.ERROR, e.toString());
+        }
+        
+        return new PluginResult(Status.OK);
+    }
+    
 	private PluginResult executeStop(JSONArray data) {
 		String audioID;
 		try {
@@ -246,7 +267,15 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		            }
 		        });				
 				
-			} else if (STOP.equals(action)) {
+            } else if (PAUSE.equals(action)) {
+                    // Added
+                cordova.getThreadPool().execute(new Runnable() {
+                    public void run() {
+                        callbackContext.sendPluginResult( executePause(data) );
+                    }
+                });
+                
+            } else if (STOP.equals(action)) {
 				cordova.getThreadPool().execute(new Runnable() {
 		            public void run() {
 		            	callbackContext.sendPluginResult( executeStop(data) );
