@@ -14,7 +14,6 @@ static const CGFloat FADE_DELAY = 0.08;
 
 -(id) initWithPath:(NSString*) path withVoices:(NSNumber*) numVoices withVolume:(NSNumber*) volume withFadeDelay:(NSNumber *)delay
 {
-    self = [super init];
     if(self) {
         voices = [[NSMutableArray alloc] init];  
         
@@ -29,11 +28,10 @@ static const CGFloat FADE_DELAY = 0.08;
             // Subscribe to the AVPlayerItem's DidPlayToEndTime notification.
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
             
-            AVPlayer *player = [[[AVPlayer alloc] initWithPlayerItem:playerItem] autorelease];
+            AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
             player.volume = volume.floatValue;
             
             [voices addObject:player];
-            [player setDelegate:self];
             
             if(delay)
             {
@@ -55,7 +53,7 @@ static const CGFloat FADE_DELAY = 0.08;
 {
     AVPlayer * player = [voices objectAtIndex:playIndex];
     //[player setCurrentTime:0.0]; // Added
-    player.numberOfLoops = 0;
+    //player.numberOfLoops = 0;
     [player play];
     playIndex += 1;
     playIndex = playIndex % [voices count];
@@ -68,7 +66,7 @@ static const CGFloat FADE_DELAY = 0.08;
     
     AVPlayer * player = [voices objectAtIndex:playIndex];
     //[player setCurrentTime:0.0]; // Added
-    player.numberOfLoops = 0;
+    //player.numberOfLoops = 0;
     [player play];
     playIndex += 1;
     playIndex = playIndex % [voices count];
@@ -91,7 +89,7 @@ static const CGFloat FADE_DELAY = 0.08;
 
     AVPlayer * player = [voices objectAtIndex:playIndex];
     //[player setCurrentTime:0.0]; // Added
-    player.numberOfLoops = 0;
+    //player.numberOfLoops = 0;
     [player play];
     playIndex += 1;
     playIndex = playIndex % [voices count];
@@ -179,7 +177,7 @@ static const CGFloat FADE_DELAY = 0.08;
     // Just play
     AVPlayer * player = [voices objectAtIndex:playIndex];
     //[player setCurrentTime:0.0]; // Added
-    player.numberOfLoops = 0;
+    //player.numberOfLoops = 0;
     [player play];
     playIndex += 1;
     playIndex = playIndex % [voices count];
