@@ -172,7 +172,7 @@ NSString* INFO_VOLUME_CHANGED = @"(NATIVE AUDIO) Volume changed.";
             NSString* basePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"www"];
             NSString* path = [NSString stringWithFormat:@"%@/%@", basePath, assetPath];
 
-            if ([string hasPrefix:@"http"]) {
+            if ([[[NSBundle mainBundle] resourcePath] hasPrefix:@"http"]) {
                 
                 NativeStreamingAudioAsset* asset = [[NativeAudioAsset alloc] initWithPath:[[NSBundle mainBundle] resourcePath]
                                                                       withVoices:voices
