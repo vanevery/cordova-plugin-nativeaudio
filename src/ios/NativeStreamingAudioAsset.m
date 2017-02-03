@@ -12,6 +12,10 @@
 static const CGFloat FADE_STEP = 0.05;
 static const CGFloat FADE_DELAY = 0.08;
 
++(void) NativeStreamingAudioAsset {
+
+}
+
 -(id) initWithPath:(NSString*) path withVoices:(NSNumber*) numVoices withVolume:(NSNumber*) volume withFadeDelay:(NSNumber *)delay
 {
     if(self) {
