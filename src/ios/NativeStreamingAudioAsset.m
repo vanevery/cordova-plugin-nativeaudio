@@ -1,14 +1,13 @@
 //
 // 
-//  NativeAudioAsset.m
-//  NativeAudioAsset
+//  NativeStreamingAudioAsset.m
+//  NativeStreamingAudioAsset
 //
-//  Created by Sidney Bofah on 2014-06-26.
 //
 
-#import "NativeAudioAsset.h"
+#import "NativeStreamingAudioAsset.h"
 
-@implementation NativeAudioAsset
+@implementation NativeStreamingAudioAsset
 
 static const CGFloat FADE_STEP = 0.05;
 static const CGFloat FADE_DELAY = 0.08;
