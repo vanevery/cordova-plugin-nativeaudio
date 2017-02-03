@@ -124,7 +124,7 @@ static const CGFloat FADE_DELAY = 0.08;
 - (void) pause
 {
     for (int x = 0; x < [voices count]; x++) {
-        AVAudioPlayer * player = [voices objectAtIndex:x];
+        AVPlayer * player = [voices objectAtIndex:x];
         [player pause];
     }
 }
@@ -135,7 +135,7 @@ static const CGFloat FADE_DELAY = 0.08;
     // No stop method, just pause
     
     for (int x = 0; x < [voices count]; x++) {
-        AVAudioPlayer * player = [voices objectAtIndex:x];
+        AVPlayer * player = [voices objectAtIndex:x];
         [player pause];
     }
 }
@@ -147,7 +147,7 @@ static const CGFloat FADE_DELAY = 0.08;
     // Just pause
     
     for (int x = 0; x < [voices count]; x++) {
-        AVAudioPlayer * player = [voices objectAtIndex:x];
+        AVPlayer * player = [voices objectAtIndex:x];
         [player pause];
     }
     
@@ -205,7 +205,7 @@ static const CGFloat FADE_DELAY = 0.08;
 {
 
     for (int x = 0; x < [voices count]; x++) {
-        AVAudioPlayer * player = [voices objectAtIndex:x];
+        AVPlayer * player = [voices objectAtIndex:x];
 
         [player setVolume:volume.floatValue];
     }
