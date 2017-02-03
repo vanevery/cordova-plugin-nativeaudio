@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 #import <AVFoundation/AVAudioPlayer.h>
+#import <AVFoundation/AVPlayer.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "NativeAudioAsset.h"
+#import "NativeStreamingAudioAsset.h"
 
 @interface NativeAudio : CDVPlugin {
     NSMutableDictionary* audioMapping; 
