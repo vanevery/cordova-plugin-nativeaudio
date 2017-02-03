@@ -1,17 +1,17 @@
 //
 //
-//  NativeAudioAsset.h
-//  NativeAudioAsset
+//  NativeStreamingAudioAsset.h
+//  NativeStreamingAudioAsset
 //
-//  Created by Sidney Bofah on 2014-06-26.
 //
 
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVAudioPlayer.h>
+#import <AVFoundation/AVPlayer.h>
+#import <AVFoundation/AVPlayerItem.h>
 
 typedef void (^CompleteCallback)(NSString*);
 
-@interface NativeAudioAsset : NSObject<AVAudioPlayerDelegate> {
+@interface NativeStreamingAudioAsset {
     NSMutableArray* voices;
     int playIndex;
     NSString* audioId;
@@ -31,6 +31,5 @@ typedef void (^CompleteCallback)(NSString*);
 - (void) unload;
 - (void) setVolume:(NSNumber*) volume;
 - (void) setCallbackAndId:(CompleteCallback)cb audioId:(NSString*)audioId;
-- (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag;
-- (void) audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error;
+- (void) itemDidFinishPlaying:(NSNotification *) notification;
 @end
