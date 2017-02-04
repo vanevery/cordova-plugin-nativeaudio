@@ -11,7 +11,7 @@
 
 typedef void (^CompleteCallback)(NSString*);
 
-@interface NativeStreamingAudioAsset {
+@interface NativeStreamingAudioAsset : NSObject {
     NSMutableArray* voices;
     int playIndex;
     NSString* audioId;
