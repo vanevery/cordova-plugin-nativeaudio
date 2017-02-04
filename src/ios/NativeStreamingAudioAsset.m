@@ -12,17 +12,17 @@
 static const CGFloat FADE_STEP = 0.05;
 static const CGFloat FADE_DELAY = 0.08;
 
-+(void) NativeStreamingAudioAsset {
-
-}
+//+(void) NativeStreamingAudioAsset {
+//
+//}
 
 -(id) initWithPath:(NSString*) path withVoices:(NSNumber*) numVoices withVolume:(NSNumber*) volume withFadeDelay:(NSNumber *)delay
 {
+    self = [super init];
     if(self) {
         voices = [[NSMutableArray alloc] init];  
         
         NSURL *pathURL = [NSURL fileURLWithPath : path];
-
         
         for (int x = 0; x < [numVoices intValue]; x++) {
             
