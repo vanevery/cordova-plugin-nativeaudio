@@ -31,15 +31,21 @@
             </feature>
         </config-file>
 
+        <source-file src="src/android/BackgroundAudioService.java" target-dir="src/com/rjfun/cordova/plugin/nativeaudio"/>
         <source-file src="src/android/NativeAudio.java" target-dir="src/com/rjfun/cordova/plugin/nativeaudio"/>
         <source-file src="src/android/NativeAudioAsset.java" target-dir="src/com/rjfun/cordova/plugin/nativeaudio"/>
         <source-file src="src/android/NativeAudioAssetComplex.java" target-dir="src/com/rjfun/cordova/plugin/nativeaudio"/>
 
-        <config-file target="AndroidManifest.xml" parent="/*">
+        <config-file target="AndroidManifest.xml" parent="/*">		
             <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
         </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*/application">    
+			<service android:name="com.rjfun.cordova.plugin.nativeaudio.BackgroundAudioService" />
+        </config-file>
+
 
     </platform>
 
