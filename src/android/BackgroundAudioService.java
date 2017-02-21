@@ -20,15 +20,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import static android.R.attr.data;
 import static com.rjfun.cordova.plugin.nativeaudio.NativeAudio.ERROR_AUDIOID_EXISTS;
 import static com.rjfun.cordova.plugin.nativeaudio.NativeAudio.ERROR_NO_AUDIOID;
 import static com.rjfun.cordova.plugin.nativeaudio.NativeAudio.LOOP;
-
+import static com.transistorsoft.tslocationmanager.a.e;
 
 public class BackgroundAudioService extends Service {
 
     private static final String LOGTAG = "BackgroundAudioService";
     private static HashMap<String, NativeAudioAsset> assetMap;
+    private static HashMap<String, CallbackContext> completeCallbacks;
 
     public class BackgroundAudioServiceBinder extends Binder {
         BackgroundAudioService getService() {
@@ -44,13 +46,7 @@ public class BackgroundAudioService extends Service {
         return basBinder;
     }
 
-// 		public void haveFun() {
-// 			if (mediaPlayer.isPlaying()) {
-// 				mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 2500);
-// 			}
-// 		}
-
-    PluginResult executePreload(JSONArray data) {
+    public PluginResult executePreload(JSONArray data) {
         String audioID;
         try {
             audioID = data.getString(0);
@@ -106,17 +102,17 @@ public class BackgroundAudioService extends Service {
                 else
                     asset.play(new Callable<Void>() {
                         public Void call() throws Exception {
-// HERE
-//                            CallbackContext callbackContext = completeCallbacks.get(audioID);
-//                            if (callbackContext != null) {
-//                                JSONObject done = new JSONObject();
-//                                done.put("id", audioID);
-//                                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, done));
-//                            }
+                            CallbackContext callbackContext = completeCallbacks.get(audioID);
+                            if (callbackContext != null) {
+                                JSONObject done = new JSONObject();
+                                done.put("id", audioID);
+                                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, done));
+                            }
                             return null;
                         }
                     });
             } else {
+
                 return new PluginResult(PluginResult.Status.ERROR, ERROR_NO_AUDIOID);
             }
         } catch (JSONException e) {
@@ -209,15 +205,27 @@ public class BackgroundAudioService extends Service {
         return new PluginResult(PluginResult.Status.OK);
     }
 
+    public PluginResult executeAddCompleteCallback(JSONArray data, CallbackContext callbackContext) {
+        if (completeCallbacks == null) {
+            completeCallbacks = new HashMap<String, CallbackContext>();
+        }
+
+        try {
+            String audioID = data.getString(0);
+            completeCallbacks.put(audioID, callbackContext);
+        } catch (JSONException e) {
+            return new PluginResult(PluginResult.Status.ERROR, e.toString());
+        }
+
+        return new PluginResult(PluginResult.Status.OK);
+    }
+
     private void initSoundPool() {
 
         if (assetMap == null) {
             assetMap = new HashMap<String, NativeAudioAsset>();
         }
 
-//        if (resumeList == null) {
-//            resumeList = new ArrayList<NativeAudioAsset>();
-//        }
     }
 
     @Override
@@ -225,26 +233,16 @@ public class BackgroundAudioService extends Service {
         Log.v("PLAYERSERVICE", "onCreate");
 
         initSoundPool();
-
-// 			mediaPlayer = MediaPlayer.create(this, R.raw.test);
-// 			mediaPlayer.setOnCompletionListener(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v("PLAYERSERVICE", "onStartCommand");
 
-// 			if (!mediaPlayer.isPlaying()) {
-// 				mediaPlayer.start();
-// 			}
         return START_STICKY;
     }
 
     public void onDestroy() {
-// 			if (mediaPlayer.isPlaying()) {
-// 				mediaPlayer.stop();
-// 			}
-// 			mediaPlayer.release();
         Log.v("SIMPLESERVICE", "onDestroy");
     }
 

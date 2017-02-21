@@ -38,8 +38,7 @@ import org.apache.cordova.PluginResult;
 import org.apache.cordova.PluginResult.Status;
 import org.json.JSONObject;
 
-import static com.transistorsoft.tslocationmanager.a.e;
-
+import static android.R.attr.data;
 
 public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFocusChangeListener {
 
@@ -63,9 +62,6 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 
 	private static final String LOGTAG = "NativeAudio";
 	
-    private static ArrayList<NativeAudioAsset> resumeList;
-	private static HashMap<String, CallbackContext> completeCallbacks;
-    private boolean fadeMusic = false;
 	Intent playbackServiceIntent;
 	BackgroundAudioService baService;
 
@@ -82,19 +78,9 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		}
 	};
 
+	// No-op
 	public void setOptions(JSONObject options) {
-		if(options != null) {
-			if(options.has(OPT_FADE_MUSIC)) this.fadeMusic = options.optBoolean(OPT_FADE_MUSIC);
-		}
 	}
-
-//	private PluginResult executeIsReady(JSONArray data) {
-//		if (baService != null) {
-//			return new PluginResult(PluginResult.Status.OK, true);
-//		} else {
-//			return new PluginResult(PluginResult.Status.OK, false);
-//		}
-//	}
 
 	private PluginResult executePreload(JSONArray data) {
 			// Call on service
@@ -127,6 +113,10 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		return baService.executeSetVolumeForComplexAsset(data);
 	}
 
+	private PluginResult executeAddCompleteCallback(JSONArray data, CallbackContext callbackContext) {
+		return baService.executeAddCompleteCallback(data, callbackContext);
+	}
+
 	@Override
 	protected void pluginInitialize() {
 		Log.v(LOGTAG,"*** pluginInitialize ***");
@@ -156,14 +146,7 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		PluginResult result = null;
 
 		try {
-			/*
-			if (IS_READY.equals(action)) {
-				cordova.getThreadPool().execute(new Runnable() {
-					public void run() {
-						callbackContext.sendPluginResult( executeIsReady(data) );
-					}
-				});
-			} else */ if (SET_OPTIONS.equals(action)) {
+			if (SET_OPTIONS.equals(action)) {
                 JSONObject options = data.optJSONObject(0);
                 this.setOptions(options);
                 callbackContext.sendPluginResult( new PluginResult(Status.OK) );
@@ -190,7 +173,7 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
 		        });				
 				
             } else if (PAUSE.equals(action)) {
-                    // Added
+				// Added
                 cordova.getThreadPool().execute(new Runnable() {
                     public void run() {
                         callbackContext.sendPluginResult( executePause(data) );
@@ -212,22 +195,18 @@ public class NativeAudio extends CordovaPlugin implements AudioManager.OnAudioFo
                     }
                 });
             } else if (ADD_COMPLETE_LISTENER.equals(action)) {
-                if (completeCallbacks == null) {
-                    completeCallbacks = new HashMap<String, CallbackContext>();
-                }
-                try {
-                    String audioID = data.getString(0);
-                    completeCallbacks.put(audioID, callbackContext);
-                } catch (JSONException e) {
-                    callbackContext.sendPluginResult(new PluginResult(Status.ERROR, e.toString()));
-		}
-	    } else if (SET_VOLUME_FOR_COMPLEX_ASSET.equals(action)) {
+				cordova.getThreadPool().execute(new Runnable() {
+					public void run() {
+						callbackContext.sendPluginResult( executeAddCompleteCallback(data, callbackContext) );
+					}
+				});
+	    	} else if (SET_VOLUME_FOR_COMPLEX_ASSET.equals(action)) {
 				cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
-	                        callbackContext.sendPluginResult( executeSetVolumeForComplexAsset(data) );
+						callbackContext.sendPluginResult( executeSetVolumeForComplexAsset(data) );
                     }
                  });
-	    }
+	    	}
             else {
                 result = new PluginResult(Status.OK);
             }
