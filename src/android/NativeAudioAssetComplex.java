@@ -54,7 +54,10 @@ public class NativeAudioAssetComplex implements OnPreparedListener, OnCompletion
 		{
 			mp.pause();
 			mp.setLooping(loop);
-			mp.seekTo(0);
+
+//			Log.v(LOGTAG, "NativeAudioAssetComplex invokePlay seekTo 0");
+			//mp.seekTo(0);
+
 			mp.start();
 		}
 		if ( !playing && state == PREPARED )
@@ -137,7 +140,10 @@ public class NativeAudioAssetComplex implements OnPreparedListener, OnCompletion
 		if (state == PENDING_PLAY) 
 		{
 			mp.setLooping(false);
-			mp.seekTo(0);
+
+//			Log.v(LOGTAG, "NativeAudioAssetComplex onPrepared PENDING PLAY seekTo 0");
+			//mp.seekTo(0);
+
 			mp.start();
 			state = PLAYING;
 		}
@@ -151,7 +157,9 @@ public class NativeAudioAssetComplex implements OnPreparedListener, OnCompletion
 		else
 		{
 			state = PREPARED;
-			mp.seekTo(0);
+
+//			Log.v(LOGTAG, "NativeAudioAssetComplex onPrepared PENDING PLAY seekTo 0");
+//			mp.seekTo(0);
 		}
 	}
 	
